@@ -79,6 +79,58 @@ describe("point_circle", function(){
 })
 
 // --- REST OF POINT SPEC HERE --- //
+describe("point_aabb", function(){
+    
+    it("should return true if point is on the edge of the bounding box", function(){
+        var point = {x: 4, y: 5},
+            aabb = {x: 4, y: 4, width: 20, height: 20}
+        
+        expect(c.check.point_aabb(point, aabb)).toEqual(true)
+        
+        point.y = 24
+        
+        expect(c.check.point_aabb(point, aabb)).toEqual(true)
+        
+        point = {x: aabb.x, y: aabb.y}
+
+        expect(c.check.point_aabb(point, aabb)).toEqual(true)
+    
+    })
+    
+    it("should return false if point is outside of bounding box", function(){
+        
+        var point = {x: 4, y: 1},
+            aabb = {x: 4, y: 4, width: 20, height: 20}
+        
+        expect(c.check.point_aabb(point, aabb)).toEqual(false)
+        
+        point.x = 6
+        
+        expect(c.check.point_aabb(point, aabb)).toEqual(false)
+        
+        point = {x: 24.001, y: 5}
+        
+        expect(c.check.point_aabb(point, aabb)).toEqual(false)
+        
+    })
+
+    it("should return true if point is inside of bounding box", function(){
+        var point = {x: 4, y: 20},
+            aabb = {x: -4, y: 4, width: 20, height: 20}
+        
+        expect(c.check.point_aabb(point, aabb)).toEqual(true)
+
+        point = {x: -2, y: 10}
+        
+        expect(c.check.point_aabb(point, aabb)).toEqual(true)
+        
+    })
+})
+
+
+describe("point_poly", function(){})
+
+
 describe("circle_circle", function(){
     
     it("should return true for circles just touching", function(){
@@ -131,3 +183,12 @@ describe("circle_circle", function(){
     })
 })
 
+describe("circle_aabb")
+
+describe("circle_poly")
+
+describe("aabb_aabb")
+
+describe("aabb_poly")
+
+describe("poly_poly")
