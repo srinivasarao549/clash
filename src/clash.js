@@ -1,6 +1,6 @@
 !function (context, undefined) {
       
-         // higher-order function to allow key remapping
+         // wrapping function to allow key remapping
      var clash_outer = function(input_map){
 
           var map = {

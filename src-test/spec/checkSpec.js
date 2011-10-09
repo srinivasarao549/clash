@@ -183,12 +183,63 @@ describe("circle_circle", function(){
     })
 })
 
-describe("circle_aabb")
+describe("circle_aabb", function(){})
 
-describe("circle_poly")
+describe("circle_poly", function(){})
 
-describe("aabb_aabb")
+describe("aabb_aabb", function(){
+    
+    it("should return true for bounding boxes just touching", function(){
+         var aabb1 = {x: 0, y: 0, width: 1, height: 1},
+             aabb2 = {x: 1, y: 0, width: 1, height: 1}
+            
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(true)
+            
+        aabb2.x = -1
+        
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(true)
+        
+        aabb2.y = -1
+        
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(true)
+        
+    })
 
-describe("aabb_poly")
+    it("should return false for bounding boxes not touching", function(){
+         var aabb1 = {x: 0, y: 0, width: 0.5, height: 1},
+             aabb2 = {x: 1, y: 0, width: 1, height: 1}
+            
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(false)
+            
+        aabb2.x = -1.01
+        
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(false)
+        
+        aabb2.y = -1.01
+        
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(false)
+        
+    })
+    
+    it("should return true for bounding boxes intersecting", function(){
+         var aabb1 = {x: -10, y: -10, width: 20, height: 20},
+             aabb2 = {x: 1, y: 0, width: 1, height: 1}
+            
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(true)
+            
+        aabb2.x = -1.01
+        
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(true)
+        
+        aabb2.y = -1.01
+        
+        expect(c.check.aabb_aabb(aabb1, aabb2)).toEqual(true)
+        
+    })
+    
 
-describe("poly_poly")
+})
+
+describe("aabb_poly", function(){})
+
+describe("poly_poly", function(){})
