@@ -78,7 +78,6 @@ describe("point_circle", function(){
     
 })
 
-// --- REST OF POINT SPEC HERE --- //
 describe("point_aabb", function(){
     
     it("should return true if point is on the edge of the bounding box", function(){
@@ -128,7 +127,44 @@ describe("point_aabb", function(){
 })
 
 
-describe("point_poly", function(){})
+describe("point_poly", function(){
+    
+    it("should return true if point touches any of edges", function(){
+        
+        var poly = { vertices:[{x:1, y:1}, {x:2, y:1.5}, {x:3, y:1}, {x:2, y:2}] },
+            point = {x: 1, y: 1}
+            
+        expect(c.check.point_poly(point, poly)).toEqual(true)
+        
+        point = {x: 2, y: 2}
+        
+        expect(c.check.point_poly(point, poly)).toEqual(true)
+        
+        point = {x: 2.5, y: 1.25}
+        
+        expect(c.check.point_poly(point, poly)).toEqual(true)
+        
+    })
+    
+    
+    it("should return false if point lies outside of poly", function(){
+        
+        var poly = { vertices:[{x:1, y:1}, {x:2, y:1.5}, {x:3, y:1}, {x:2, y:2}] },
+            point = {x: 1.5, y: 0.1}
+            
+        expect(c.check.point_poly(point, poly)).toEqual(false)
+        
+        point = {x: 2.2, y: 2}
+        
+        expect(c.check.point_poly(point, poly)).toEqual(false)
+        
+        point = {x: 2.5, y: 1.2}
+        
+        expect(c.check.point_poly(point, poly)).toEqual(false)
+        
+    })
+    
+})
 
 
 describe("circle_circle", function(){
@@ -183,7 +219,101 @@ describe("circle_circle", function(){
     })
 })
 
-describe("circle_aabb", function(){})
+describe("circle_aabb", function(){
+    
+    
+    it("should return true if circle touches corners", function(){
+        var circle = {x: 0, y: 0, radius: DIAGONAL_DIST_OF_1_COORD },
+            aabb = {x: 1, y: 1,  width: 1, height: 1}
+            
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.x = 2
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.y = 2
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.y = 0
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+
+        
+    })
+    
+    
+    it("should return false if circle doesn't touch corners", function(){
+        
+        var circle = {x: 0, y: 0, radius: DIAGONAL_DIST_OF_1_COORD-0.0001 },
+            aabb = {x: 1, y: 1, width: 1, height: 1}
+            
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.x = 2
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.y = 2
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.y = 0
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        
+    })
+    
+    it("should return true if touches edges", function(){
+        
+        var circle = {x: 1, y: 0, radius: 1 },
+            aabb = {x: 1, y: 1, width: 2, height: 2}
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.y = 3
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.x = 0
+        circle.y = 1
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        circle.x = 3
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(true)
+        
+        
+        
+    })
+    
+    it("should return false if circle does not touches edges of bb", function(){
+        
+        var circle = {x: 1, y: 0, radius: 0.01 },
+            aabb = {x: 1, y: 1, width: 1, height: 1}
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(false)
+        
+        circle.y = 3
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(false)
+        
+        circle.x = 0
+        circle.y = 1
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(false)
+        
+        circle.x = 3
+        
+        expect(c.check.circle_aabb(circle, aabb)).toEqual(false)
+        
+    })
+
+
+})
 
 describe("circle_poly", function(){})
 
@@ -237,7 +367,6 @@ describe("aabb_aabb", function(){
         
     })
     
-
 })
 
 describe("aabb_poly", function(){})
