@@ -45,31 +45,30 @@
             point_poly: function(A, B){
                 var verts = B[v],
                     l = verts.length,
-                    odd = false,
-                    verti, vertj,
-                    m, y_on_line
-                    
+                    odd = false
+                                        
                 // for info about this algorithm, see http://paulbourke.net/geometry/insidepoly/ (it's the first one, basically)
                 for (var i = 0, j = l - 1; i < l; j = i++ ){
-                    verti = verts[i]
-                    vertj = verts[j]
-                    
-                    if ( check.point_point(A, verti)) return true
-                    
-                    if ((A[x] <= verti[x]) != (A[x] <= vertj[x]) ){
-                         // we need to find out where y would be on the line between vertj and verti, so we're using
-                         // y = mx + c (where m = gradient of the line, and c is the value of y where x crosses 0, which we take
-                         //  to be verti[x])
-
-                        // TODO: Add special case for M = NaN (when verti[x] - vertj[x] == 0)
-                        // TODO: Add special case for vertj[y] == verti[y] && verti[y] == A[y]
+                    var v_i = verts[i],
+                        v_j = verts[j]
                         
-                         m = (verti[y] - vertj[y]) / (verti[x] - vertj[x])
-                         y_on_line = (m * (A[x] - vertj[x])) + vertj[y]
-                         if ( A[y] < y_on_line ) odd = !odd
-                         
-                     }
+                    // check for gradient
+                    if ( (A[x] <= v_i[x]) != (A[x] <= v_j[x]) || (A[x] < v_i[x]) != (A[x] < v_j[x]) ){
+                        var m = (v_i[y] - v_j[y])/(v_i[x] - v_j[x]),
+                            y_for_x = m*(A[x] - v_i[x]) + v_i[y]
+                        
+                        // check if on line
+                        if ( A[y] == y_for_x ) return true 
+                        
+                        // otherwise, project
+                        else if ( A[y] < y_for_x ) odd = !odd
                     
+                        // if v_i[x] == v_j[x], m will be -Infinity || Infinity, and y_for_x will be NaN, so do another check
+                        else if ( m == Math.abs(Infinity) && A[y] <= v_i[y] ) odd = !odd    
+                    
+                    
+                    }
+
                 }
                 return odd
                 

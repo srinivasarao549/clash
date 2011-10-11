@@ -129,41 +129,183 @@ describe("point_aabb", function(){
 
 describe("point_poly", function(){
     
-    it("should return true if point touches any of edges", function(){
+    describe("aabb represented as a poly", function(){
         
-        var poly = { vertices:[{x:1, y:1}, {x:2, y:1.5}, {x:3, y:1}, {x:2, y:2}] },
+        it("should return true if point is on any of the edges", function(){
+            var poly = {vertices: [{x: -1, y: -1}, {x: -1, y: 1}, {x: 1, y: 1}, {x: 1, y: -1}]},
+                point = {x: -1, y: 0}
+                
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: 1, y: 0}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: 0, y: 1}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: 0, y: -1}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+        })
+        
+        it("should return true if point is *inside*", function(){
+            var poly = {vertices: [{x: -1, y: -1}, {x: -1, y: 1}, {x: 1, y: 1}, {x: 1, y: -1}]},
+                point = {x: 0.5, y: 0}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: - 0.5, y: 0}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: 0.5, y: 0.5}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+        })
+        
+        it('should return false if point is outside of poly', function(){
+            
+            var poly = {vertices: [{x: -1, y: -1}, {x: -1, y: 1}, {x: 1, y: 1}, {x: 1, y: -1}]},
+                point = {x: 1.001, y: 0}
+            
+            
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+
+            point = {x: -1.001, y: 0}
+
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+
+            point = {x: 0, y: 1.001}
+
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+
+            point = {x: 0, y: -1.001}
+
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+        
+            
+        })
+        
+        it('should return true if point is on corners', function(){
+            
+            var poly = {vertices: [{x: -1, y: -1}, {x: -1, y: 1}, {x: 1, y: 1}, {x: 1, y: -1}]},
+                point = {x: -1, y: -1}
+            
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+
+            point = {x: -1, y: 1}
+
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+
             point = {x: 1, y: 1}
+
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+
+            point = {x: 1, y: -1}
+
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+        
             
-        expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+        })
         
-        point = {x: 2, y: 2}
+      
+    })
+
+    describe("rotated aabb represented as a poly", function(){
         
-        expect(c.check.point_poly(point, poly)).toEqual(true)
         
-        point = {x: 2.5, y: 1.25}
+        it("should return true if point is on any of the edges", function(){
+            var poly = {vertices: [{x: -1, y: 0}, {x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}]},
+                point = {x: -0.5, y: 0.5}
+
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: 0.5, y: 0.5}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: 0.5, y: -0.5}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: -0.5, y: -0.5}
         
-        expect(c.check.point_poly(point, poly)).toEqual(true)
+            expect(c.check.point_poly(point, poly)).toEqual(true)
         
+        })
+    
+        it("should return true if point is *inside*", function(){
+            var poly = {vertices: [{x: -1, y: 0}, {x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}]},
+                point = {x: -0.5, y: 0.5}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: - 0.5, y: 0}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+            point = {x: 0.5, y: 0.5}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+            
+        })
+        
+        
+      it('should return false if point is outside of poly', function(){
+
+          var poly = {vertices: [{x: -1, y: 0}, {x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}]},
+            point = {x: 1.001, y: 0}
+
+
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+
+            point = {x: -1.001, y: 0}
+
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+
+            point = {x: 0, y: 1.001}
+
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+
+            point = {x: 0, y: -1.001}
+
+            expect(c.check.point_poly(point, poly)).toEqual(false)
+
+
+        })
+    
+    
+        
+        it('should return true if point is on corners', function(){
+            
+            var poly = {vertices: [{x: -1, y: 0}, {x: 0, y: -1}, {x: 1, y: 0}, {x: 0, y: 1}]},
+              point = {x: -1, y: 0}
+            
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+
+            point = {x: 0, y: -1}
+
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+
+            point =  {x: 1, y: 0}
+
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+
+            point = {x: 0, y: 1}
+
+            expect(c.check.point_poly(point, poly)).toEqual(true)
+        
+        })
+
     })
     
-    
-    it("should return false if point lies outside of poly", function(){
-        
-        var poly = { vertices:[{x:1, y:1}, {x:2, y:1.5}, {x:3, y:1}, {x:2, y:2}] },
-            point = {x: 1.5, y: 0.1}
-            
-        expect(c.check.point_poly(point, poly)).toEqual(false)
-        
-        point = {x: 2.2, y: 2}
-        
-        expect(c.check.point_poly(point, poly)).toEqual(false)
-        
-        point = {x: 2.5, y: 1.2}
-        
-        expect(c.check.point_poly(point, poly)).toEqual(false)
-        
-    })
-    
+    //-- TODO: WRITE ARBITRARY POLY CODE --//
 })
 
 
