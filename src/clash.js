@@ -1,4 +1,4 @@
-void function () {
+void function (context) {
       
     var clash = {
 
@@ -90,5 +90,5 @@ void function () {
         poly_poly: function(A, B){}
     }
 
-    window["clash"] = clash
-}()
+    context["clash"] = clash
+}(this)
