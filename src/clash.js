@@ -1,4 +1,4 @@
-void function (context) {
+void function (root) {
       
     var clash = {
 
@@ -90,5 +90,8 @@ void function (context) {
         poly_poly: function(A, B){}
     }
 
-    context["clash"] = clash
+    if ( typeof module == "undefined" && module.exports )
+        module.exports = clash
+    else 
+        root["clash"] = clash
 }(this)
